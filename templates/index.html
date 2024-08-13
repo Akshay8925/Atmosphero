@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atmosphero</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <h1>Atmosphero</h1>
+    <form method="get">
+        <input type="text" name="city" placeholder="Enter city name" required>
+        <input type="text" name="country" placeholder="Enter country code (e.g., US)" required>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    {% if weather %}
+    <h2>Current Weather for {{ weather['current']['name'] }}, {{ weather['current']['sys']['country'] }}</h2>
+    <p>Temperature: {{ weather['current']['main']['temp'] }}K</p>
+    <p>Weather: {{ weather['current']['weather'][0]['description'] }}</p>
+
+    <h2>7-Day Forecast</h2>
+    <ul>
+        {% for day in weather['forecast']['list'] %}
+        <li>
+            Date: {{ day['dt'] | datetimeformat }}<br>
+            Temperature: {{ day['temp']['day'] }}K<br>
+            Weather: {{ day['weather'][0]['description'] }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% elif error %}
+    <p>{{ error }}</p>
+    {% endif %}
+</body>
+
+</html>
